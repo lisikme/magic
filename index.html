@@ -21,18 +21,100 @@
 </script>
 
 
+<h1 id="lock">Требуется авторизация для управления</h1>
+<h1 id="logo">FlyFox</h1>
 <div id="player">
     <img id="icon" src="http://host.ketaru.com:8080/logs/icon.png" onload="refreshIt(this)" onerror="off(this)">
     <h1 id="songs"></h1>
-    <a id="but1" href="http://host.ketaru.com:8000/?pass=qawsed&cmd=next" target="iframe1">▶️ Пропустить</a>
-    <a id="but2" href="http://host.ketaru.com:8000/?pass=qawsed&cmd=reboot" target="iframe1">🟥 Перезагрузка</a>
-
+    <a id="but1" target="iframe1">Skip</a>
+    <a id="but2" target="iframe1">Restart</a>
+    <input type="text" id="pass" placeholder="Пароль" oninput="changeh1(this.value)" maxlength="8">
+    
 </div>
-<audio id="au" src="http://host.ketaru.com/radio" controls volume="0.2"></audio>
+<audio id="au" src="http://host.ketaru.com/radio" controls></audio>
+<iframe id="iq" name="iframe1" frameborder="0"></iframe>
 <script>
-    document.getElementById('au').volume = 0.1;
+    function changeh1(newtext) {
+        if (newtext === ''){
+            document.getElementById("lock").removeAttribute("style")
+            document.getElementById("but1").removeAttribute("href")
+            document.getElementById("but2").removeAttribute("href")
+        }
+        else {
+            document.getElementById("lock").style.display = 'none';
+            document.getElementById("but1").href=`http://host.ketaru.com:8000/?pass=${newtext}&cmd=next`
+            document.getElementById("but2").href=`http://host.ketaru.com:8000/?pass=${newtext}&cmd=reboot`
+        }
+    }
 </script>
 <style>
+    #lock{
+        font-size: 16px;
+        top: 5px;
+        position: absolute;
+        color: #ff7a7a;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+    #logo{
+        font-size: 16px;
+        top: 5px;
+        position: absolute;
+        color: #a5a5a5;
+        /* margin-left: auto; */
+        /* margin-right: auto; */
+        left: 110px;
+        /* right: 0; */
+        text-align: center;
+    }
+    #but1{
+        left: 115px;
+        position: relative;
+        top: 5px;
+    }
+    #but2{
+        left: 120px;
+        position: relative;
+        top: 5px;
+    }
+    input[type] {
+        left: 125px;
+        position: relative;
+        top: 4px;
+        width: 90px;
+        height: 35px;
+        padding: 7px 10px;
+        border-radius: 5px;
+        background: #111;
+        color: antiquewhite;
+        /* box-sizing: border-box; */
+        border: 1px solid #555;
+        outline: none;
+    }
+    input[type]:focus {
+        background: #1f1f1f;
+        border: 1px solid #555;
+    }
+    input[type]:hover{
+        background: #1f1f1f;
+        border: 1px solid #555;
+    }
+    a{
+        border: 1px solid #555;
+        background: #111111;
+        padding: 7px 20px;
+        border-radius: 5px;
+        text-decoration: none; /* Убирает подчеркивание для ссылок */
+        color: white;
+    } 
+    a:hover {
+        background: #1f1f1f;
+        text-decoration: none; /* Добавляем подчеркивание при наведении курсора на ссылку */
+        color: white; /* Ссылка красного цвета */
+    }
     audio {
         background-color: #f1f3f4;
         filter: sepia(2%) saturate(70%) grayscale(71) contrast(70%) invert(100%);
@@ -41,16 +123,6 @@
         margin-top: 10px;
         height: 30px;
         border-radius: 10px;
-    }
-    #but1{
-        left: 115px;
-        position: relative;
-        top: 5px;
-    }
-    #but2{
-        left: 125px;
-        position: relative;
-        top: 5px;
     }
     #player{
         background: #262b30;
@@ -82,20 +154,7 @@
     #stat{
         display: none;
     }
-    a{
-        background: #333333;
-        padding: 10px;
-        border-radius: 10px;
-        text-decoration: none; /* Убирает подчеркивание для ссылок */
-        color: white;
-    } 
-    a:hover {
-        background: #444444;
-        text-decoration: none; /* Добавляем подчеркивание при наведении курсора на ссылку */
-        color: white; /* Ссылка красного цвета */
-    }
     #iq{
         display: none;
     }
     </style>
-<iframe id="iq" name="iframe1" src="http://host.ketaru.com:8000/?pass=qawsed&action=playbackinfo" frameborder="0"></iframe>
