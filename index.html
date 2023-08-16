@@ -19,38 +19,69 @@
     function test(){_css.href=css_;};
     setInterval(test, 2000);
 </script>
-
-
-<h1 id="lock">Требуется авторизация для управления</h1>
-<h1 id="logo">FlyFox</h1>
+<h1 id="lock" style="color: #FF8800;">Требуется вход</h1>
+<h1 id="logo">Радио FlyFox</h1>
 <div id="player">
     <img id="icon" src="http://host.ketaru.com:8080/logs/icon.png" onload="refreshIt(this)" onerror="off(this)">
     <h1 id="songs"></h1>
-    <a id="but1" target="iframe1">Skip</a>
-    <a id="but2" target="iframe1">Restart</a>
-    <input type="text" id="pass" placeholder="Пароль" oninput="changeh1(this.value)" maxlength="8">
+    <input type="password" id="pass" placeholder="Пароль" oninput="setTimeout(() => { changeh1(this.value)}, 200); " maxlength="8">
+    <a id="but1" style="display: none;" target="iframe1">Reboot</a>
+    <a id="but2" style="display: none;" target="iframe1">Next</a>
+    <a id="but3" style="display: none;" target="iframe1">🔃</a>
+    <a id="but4" style="display: none;" target="iframe1">▶️</a>
     
 </div>
 <audio id="au" src="http://host.ketaru.com/radio" controls></audio>
 <iframe id="iq" name="iframe1" frameborder="0"></iframe>
 <script>
     function changeh1(newtext) {
-        if (newtext === ''){
-            document.getElementById("lock").removeAttribute("style")
-            document.getElementById("but1").removeAttribute("href")
-            document.getElementById("but2").removeAttribute("href")
+        var http = new XMLHttpRequest();
+        http.open('GET', `http://host.ketaru.com:8000/?pass=${newtext}`);
+        http.onreadystatechange = function () {
+            if (newtext === ''){
+                document.getElementById("lock").textContent='Требуется вход'
+                document.getElementById("lock").style.color='#FF8800'
+                document.getElementById("but1").removeAttribute("href")
+                document.getElementById("but2").removeAttribute("href")
+            }
+            else{
+                if (this.responseText === 'E003: Nothing to do') {
+                    document.getElementById("but1").href=`http://host.ketaru.com:8000/?pass=${newtext}&cmd=reboot`
+                    document.getElementById("but1").removeAttribute("style")
+                    document.getElementById("but2").href=`http://host.ketaru.com:8000/?pass=${newtext}&cmd=next`
+                    document.getElementById("but2").removeAttribute("style")
+                    document.getElementById("but3").href=`http://host.ketaru.com:8000/?pass=${newtext}&cmd=set repeat_track on`
+                    document.getElementById("but3").removeAttribute("style")
+                    document.getElementById("but4").href=`http://host.ketaru.com:8000/?pass=${newtext}&cmd=set repeat_track off`
+                    document.getElementById("but4").removeAttribute("style")
+                    document.getElementById("lock").textContent='Успешный вход'
+                    document.getElementById("lock").style.color='#66FF66'
+                }
+                if (this.responseText === 'E001: Wrong password') {
+                    document.getElementById("but1").href=`http://host.ketaru.com:8000/?pass=${newtext}&cmd=reboot`
+                    document.getElementById("but1").style.display = 'none';
+                    document.getElementById("but2").href=`http://host.ketaru.com:8000/?pass=${newtext}&cmd=next`
+                    document.getElementById("but2").style.display = 'none';
+                    document.getElementById("but3").href=`http://host.ketaru.com:8000/?pass=${newtext}&cmd=set repeat_track on`
+                    document.getElementById("but3").style.display = 'none';
+                    document.getElementById("but4").href=`http://host.ketaru.com:8000/?pass=${newtext}&cmd=set repeat_track pf`
+                    document.getElementById("but4").style.display = 'none';
+                    document.getElementById("lock").textContent='Неправильный пароль'
+                    document.getElementById("lock").style.color='#FF6666'
+                }
+            }
         }
-        else {
-            document.getElementById("lock").style.display = 'none';
-            document.getElementById("but1").href=`http://host.ketaru.com:8000/?pass=${newtext}&cmd=next`
-            document.getElementById("but2").href=`http://host.ketaru.com:8000/?pass=${newtext}&cmd=reboot`
-        }
+        http.send(null);  // отправить запрос
     }
 </script>
 <style>
     #lock{
+        border-radius: 5px;
         font-size: 16px;
         top: 5px;
+        background: #262b30;
+        padding: 10px 0;
+        width: 190px;
         position: absolute;
         color: #ff7a7a;
         margin-left: auto;
@@ -60,10 +91,13 @@
         text-align: center;
     }
     #logo{
+        background: #262b30;
+        padding: 10px 20px;
+        border-radius: 5px;
         font-size: 16px;
         top: 5px;
         position: absolute;
-        color: #a5a5a5;
+        color: #ffe56f;
         /* margin-left: auto; */
         /* margin-right: auto; */
         left: 110px;
@@ -71,17 +105,32 @@
         text-align: center;
     }
     #but1{
-        left: 115px;
-        position: relative;
-        top: 5px;
-    }
-    #but2{
         left: 120px;
         position: relative;
         top: 5px;
+        color: #ff7a7a;
+    }
+    #but2{
+        left: 125px;
+        position: relative;
+        top: 5px;
+    }
+    #but3{
+        left: 130px;
+        position: relative;
+        padding: 7px 5px 7px 20px;
+        border-radius: 5px 0px 0px 5px;
+        top: 5px;
+    }
+    #but4{
+        left: 125px;
+        position: relative;
+        padding: 7px 20px 7px 5px;
+        border-radius: 0px 5px 5px 0px;
+        top: 5px;
     }
     input[type] {
-        left: 125px;
+        left: 115px;
         position: relative;
         top: 4px;
         width: 90px;
@@ -122,7 +171,7 @@
         margin: 100px;
         margin-top: 10px;
         height: 30px;
-        border-radius: 10px;
+        border-radius: 5px;
     }
     #player{
         background: #262b30;
@@ -130,20 +179,20 @@
         padding: 20px;
         margin: 100px;
         margin-bottom: 0px;
-        border-radius: 10px;
+        border-radius: 5px;
     }
 
     #icon{
         background: #111;
-        border-radius: 10px;
+        border-radius: 5px;
         position: absolute;
         height: 100px;
     }
     #songs{
         position: relative;
         left: 115px;
-        bottom: 20px;
-        font-size: 25px;
+        bottom: 18px;
+        font-size: 20px;
     }
     body{
         font-family: Calibri;
