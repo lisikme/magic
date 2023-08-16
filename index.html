@@ -42,7 +42,13 @@
                 document.getElementById("lock").textContent='Требуется вход'
                 document.getElementById("lock").style.color='#FF8800'
                 document.getElementById("but1").removeAttribute("href")
+                document.getElementById("but1").style.display = 'none';
                 document.getElementById("but2").removeAttribute("href")
+                document.getElementById("but2").style.display = 'none';
+                document.getElementById("but3").removeAttribute("href")
+                document.getElementById("but3").style.display = 'none';
+                document.getElementById("but4").removeAttribute("href")
+                document.getElementById("but4").style.display = 'none';
             }
             else{
                 if (this.responseText === 'E003: Nothing to do') {
