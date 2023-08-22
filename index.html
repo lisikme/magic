@@ -12,14 +12,14 @@
         setTimeout(function() {
             element.src = element.src.split('?')[0] + '?' + new Date().getTime();
             refreshIt(element);
-        }, 5000); // refresh every 50ms
+        }, 1000); // refresh every 50ms
     }
     function off(arg) {
         arg.src='https://i.imgur.com/dNN9rfi.png';
     }
     var _css = document.querySelector('#default'), css_ = 'http://host.ketaru.com:8080/logs/song.css';
     function test(){_css.href=css_;};
-    setInterval(test, 5000);
+    setInterval(test, 1000);
 </script>
 <h1 id="lock" style="color: #FF8800;">Требуется вход</h1>
 <h1 id="logo">Радио FlyFox</h1>
